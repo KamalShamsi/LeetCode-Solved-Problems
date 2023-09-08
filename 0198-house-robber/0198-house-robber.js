@@ -21,7 +21,7 @@ var rob = function(nums) {
     // Going through the num's array, make a decision: rob or skip
     for (let i = 2; i < n; i++) {
         // if decision: skip, then we move to dp[i-1]
-        // if devision: rob, we move to dp[i-2] and add the amount was in house at nums[i]
+        // if decision: rob, we move to dp[i-2] and add the amount was in house at nums[i]
         dp[i] = Math.max(dp[i-1], dp[i-2] + nums[i]);
     }
 
