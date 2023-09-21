@@ -1,40 +1,33 @@
 /**
- * Function to search for a target value in a sorted 2D matrix
- * @param {number[][]} matrix - The 2D array containing integers
- * @param {number} target - The integer value to search for
- * @return {boolean} - Returns true if the target exists in the matrix, otherwise false
+ * @param {number[][]} matrix
+ * @param {number} target
+ * @return {boolean}
  */
 var searchMatrix = function(matrix, target) {
-    // Get the number of rows and columns in the matrix
+    // Get the number of rows and columns in the matrix.
     let rows = matrix.length;
     let cols = matrix[0].length;
-
-    // Initialize pointers for binary search
-    let left = 0;
-    let right = rows * cols - 1;
-
-    // Perform binary search
+    
+    // Initialize two pointers for binary search.
+    let left = 0, right = rows * cols - 1;
+    
     while (left <= right) {
-        // Calculate the mid-point of the flattened matrix
+        // Calculate mid-point of the current search space.
         let mid = Math.floor((left + right) / 2);
-
-        // Convert the mid-point index to its 2D matrix indices
+        
+        // Convert the 1D index to a 2D index.
         let midElement = matrix[Math.floor(mid / cols)][mid % cols];
-
-        // Check if the midElement matches the target value
+        
+        // Check for target.
         if (midElement === target) {
             return true;
-        } 
-        // If midElement is smaller than target, discard the left half
-        else if (midElement < target) {
+        } else if (midElement < target) {
             left = mid + 1;
-        } 
-        // If midElement is greater than target, discard the right half
-        else {
+        } else {
             right = mid - 1;
         }
     }
-
-    // If we've reached this point, the target doesn't exist in the matrix
+    
+    // If we reach here, target is not in matrix.
     return false;
 };
