@@ -1,23 +1,26 @@
-function characterReplacement(s, k) {
-    let left = 0, right = 0, maxCharCount = 0, maxLength = 0;
-    const freqMap = {};
+/**
+ * https://leetcode.com/problems/longest-repeating-character-replacement/
+ * Time O(((N + 26) * N) * (M - N)) | Space O(1)
+ * @param {string} s
+ * @param {number} k
+ * @return {number}
+ */
+var characterReplacement = function(s, k) {
+    let res = 0;
+    let count = new Map();
+    let l = 0;
 
-    for (right = 0; right < s.length; right++) {
-        // Increase the count of current character
-        freqMap[s[right]] = (freqMap[s[right]] || 0) + 1;
-        
-        // Update maxCharCount with the frequency of the current character
-        maxCharCount = Math.max(maxCharCount, freqMap[s[right]]);
-        
-        // Check if the current window is valid
-        if (right - left + 1 - maxCharCount > k) {
-            freqMap[s[left]]--;  // Decrease the count of the character that is being removed
-            left++;  // Move the left pointer of the window
+    for (let r = 0; r < s.length; r++) {
+        let len  = r - l + 1
+        count.set(s[r], 1 + (count.get(s[r]) || 0))
+
+        if ((len - Math.max(...count.values())) > k) {
+            count.set(s[l], count.get(s[l]) - 1)
+            l++;
         }
-        
-        // Update maxLength with the size of the current window
-        maxLength = Math.max(maxLength, right - left + 1);
+        len = r - l + 1;
+        res = Math.max(res, len)
     }
 
-    return maxLength;
-}
+    return res;
+};
