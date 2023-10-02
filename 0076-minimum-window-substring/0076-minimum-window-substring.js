@@ -1,45 +1,33 @@
-function minWindow(s, t) {
-    let tFreq = new Map();
-    let windowFreq = new Map();
-    let minLength = Infinity;
-    let minStart = 0;
+const minWindow = function (s, t) {
+  // Edge case: if either string is empty or s is shorter than t, return an empty string
+  if (!s || !t || s.length < t.length) return "";
 
-    // Build frequency map for t
-    for (let char of t) {
-        tFreq.set(char, (tFreq.get(char) || 0) + 1);
+  // Initialize pointers and variables to keep track of the window and result
+  let l = 0, r = 0;
+  let count = 0, minI = s.length + 1, minL = s.length + 1;
+
+  // Initialize a frequency map for characters in t
+  const freqMap = {};
+  for (const ch of t) freqMap[ch] = (freqMap[ch] || 0) + 1;
+
+  // Expand the window to the right
+  while (r < s.length) {
+    // If the character is needed, decrement its count in the map and increase the count
+    if (freqMap[s[r]]-- >= 1) count += 1;
+    r += 1;
+
+    // Check if the window is valid (contains all characters of t)
+    while (count == t.length) {
+      // Update the result if the current window is smaller
+      if (r - l < minL) {
+        minL = r - l;
+        minI = l;
+      }
+      // Try to minimize the window by moving the left pointer to the right
+      if (freqMap[s[l]]++ >= 0) count -= 1;
+      l += 1;
     }
-
-    let left = 0;
-    let requiredChars = t.length;
-
-    for (let right = 0; right < s.length; right++) {
-        // Add right char to windowFreq
-        windowFreq.set(s[right], (windowFreq.get(s[right]) || 0) + 1);
-
-        // If char is in t and needed, decrease requiredChars
-        if (tFreq.get(s[right]) && windowFreq.get(s[right]) <= tFreq.get(s[right])) {
-            requiredChars--;
-        }
-
-        // If window is valid, contract it
-        while (requiredChars === 0) {
-            // Update min substring if needed
-            if (right - left + 1 < minLength) {
-                minLength = right - left + 1;
-                minStart = left;
-            }
-
-            // Remove left char from windowFreq
-            windowFreq.set(s[left], windowFreq.get(s[left]) - 1);
-            // If char is in t and needed, increase requiredChars
-            if (tFreq.get(s[left]) && windowFreq.get(s[left]) < tFreq.get(s[left])) {
-                requiredChars++;
-            }
-
-            // Move left pointer inward
-            left++;
-        }
-    }
-
-    return minLength === Infinity ? "" : s.slice(minStart, minStart + minLength);
-}
+  }
+  // Return the minimum window substring
+  return s.slice(minI, minI + minL);
+};
