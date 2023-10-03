@@ -1,19 +1,26 @@
-function lengthOfLongestSubstring(s) {
-    let windowCharsMap = new Map();
-    let windowStart = 0;
-    let maxLength = 0;
-    
-    for(let windowEnd = 0; windowEnd < s.length; windowEnd++) {
-        const endChar = s[windowEnd];
-        if(windowCharsMap.has(endChar)) {
-            // Move the start pointer so we're not counting the repeating character
-            windowStart = Math.max(windowStart, windowCharsMap.get(endChar) + 1);
-        }
-        // Save the current character's position
-        windowCharsMap.set(endChar, windowEnd);
-        
-        // Update the maximum length
-        maxLength = Math.max(maxLength, windowEnd - windowStart + 1);
+/**
+ * @param {string} s
+ * @return {number}
+ */
+var lengthOfLongestSubstring = function (s) {
+    let sub = s[0];
+    if(!s.length){
+        return 0;
     }
-    return maxLength;
-}
+    let longest = sub
+    let j = 0;
+    for (let i = j+1; i < s.length; i++) {
+        if(s.slice(j,i).split("").includes(s[i])){
+            ++j;
+            i=j;
+        }else{
+            sub=s.slice(j,i+1)
+        }
+
+        if(sub.length>longest.length){
+            longest = sub;
+        }
+
+    }
+    return longest.length;
+};
