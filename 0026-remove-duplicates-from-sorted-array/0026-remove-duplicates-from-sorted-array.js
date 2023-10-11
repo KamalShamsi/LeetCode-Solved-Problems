@@ -1,6 +1,13 @@
 var removeDuplicates = function (nums) {
-      let set = new Set(nums);
-      nums.length = 0;
-      nums.push(...set.values())
-      return set.size;
+  if (nums.length == 0) return 0;
+  var k = 0;
+
+  nums.map((num) => {
+    if (num !== nums[k]) {
+      k++;
+      nums[k] = num;
+    }
+  });
+
+  return k + 1;
 };
