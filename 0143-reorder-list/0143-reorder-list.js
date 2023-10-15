@@ -10,31 +10,39 @@
  * @return {void} Do not return anything, modify head in-place instead.
  */
 var reorderList = function(head) {
+    const nodes = [];
 
-    let next = head.next;
-    const stack = [head];
-    
-    while(next) {
-    
-        stack.push(next);
-        next = next.next;
+    let node = head;
+
+    while (node) {
+        nodes.push(node);
+
+        node = node.next;
     }
 
-    let l = 0;
-    let r = stack.length - 1;
+    let left = 0;
+    let right = nodes.length - 1;
+    let prevNode = null
 
-    let lastProcessed = null;
+    while (left <= right) {
+        const leftNode = nodes[left];
+        const rightNode = nodes[right];
 
-    while(l <= r) {
-        if (lastProcessed) {
-            lastProcessed.next = stack[l];
+        if (prevNode) {
+            prevNode.next = leftNode;
         }
-        stack[l].next = stack[r];
-        lastProcessed = stack[r];
 
-        l++;
-        r--;      
+        if (leftNode !== rightNode) {
+            leftNode.next = rightNode;
+        }
+
+        prevNode = rightNode;
+
+        left++;
+        right--;
     }
 
-    lastProcessed.next = null;
+    prevNode.next = null;
+
+    return nodes[0];
 };
