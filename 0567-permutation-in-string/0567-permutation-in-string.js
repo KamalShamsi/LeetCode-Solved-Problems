@@ -1,30 +1,53 @@
-const checkInclusion =  (s1, s2)=> {
-    const s1Map = new Map()
-    for(const ch of s1) {
-        s1Map.set(ch, s1Map.get(ch)+1 || 1);
-    }
-    let left = 0, count =s1.length;
-    for(let right=0;right<s2.length;right++) {
-        const ch = s2[right]
-        if (s1Map.has(ch)) {
-            if (s1Map.get(ch) > 0) {
-                count--
+/**
+ * @param {string} s1
+ * @param {string} s2
+ * @return {boolean}
+ */
+var checkInclusion = function(pattern, str) {
+    
+   let windowStart = 0;
+   let matched = 0;
+   let charFreq = {};
+    
+   for(let i=0;i<pattern.length;i++){
+       let char = pattern[i];
+       if(charFreq[char] === undefined){
+           charFreq[char] = 1;
+       }else{
+           charFreq[char]++;
+       }
+   }
+    
+    for(let windowEnd=0; windowEnd < str.length;windowEnd++){
+        
+        let rightChar = str[windowEnd];
+        
+        if(rightChar in charFreq){
+            charFreq[rightChar] -=1;
+            if(charFreq[rightChar] === 0){
+            matched +=1;
             }
-            s1Map.set(ch, s1Map.get(ch)-1)
         }
-        if (right-left+1 <s1.length) {
-            continue
-        }
-        if (count == 0) {
-            return true
-        }
-        if (s1Map.has(s2[left])) {
-            if (s1Map.get(s2[left]) >= 0) {
-                count++
-            }
-            s1Map.set(s2[left], s1Map.get(s2[left])+1)
-        }
-        left++
+    
+    
+    if(matched === Object.keys(charFreq).length){
+        return true;
     }
-    return false
+    
+    if(windowEnd >= pattern.length -1){
+        let leftChar = str[windowStart];
+        windowStart +=1;
+        if(leftChar in charFreq){
+            if(charFreq[leftChar] === 0){
+                matched -=1;
+            }
+            charFreq[leftChar] +=1;
+            
+         }
+      }
+    
+  }
+    
+    return false;
+    
 };
