@@ -1,20 +1,30 @@
+/**
+ * @param {number[]} piles
+ * @param {number} h
+ * @return {number}
+ */
+const canEat = (piles, mid) => {
+    let sum = 0;
+    for(let ele of piles) {
+        sum = sum + Math.ceil(ele/mid);
+    }
+    return sum
+}
+
 var minEatingSpeed = function(piles, h) {
-    let low = 1, high = Math.max(...piles);
-    
-    while (low < high) {
-        let mid = Math.floor((low + high) / 2);
-        
-        let totalHours = 0;
-        for (let pile of piles) {
-            totalHours += Math.ceil(pile / mid);
-        }
-        
-        if (totalHours > h) {
-            low = mid + 1;
+    let max = 0;
+    for(let ele of piles) {
+        max = Math.max(ele, max);
+    }
+    let l = 1;
+    let r = max;
+    while(l<r){
+        let mid = Math.floor((l+r)/2);
+        if(canEat(piles,mid) > h){
+            l = mid + 1;
         } else {
-            high = mid;
+            r = mid;
         }
     }
-    
-    return low;
+        return l;
 };
