@@ -4,33 +4,22 @@
  * @return {number}
  */
 var minEatingSpeed = function(piles, h) {
-    let left = 1;
-    let right = Math.max(...piles);
-    let k = right;
+    var [left,right]=[1,Math.max(...piles)];
+    var res=right;
 
-    while(left <= right) {
-        let mid = Math.floor((left + right)/2);
-        let hrs = 0;
-
-        for(let i=0; i<piles.length; i++) {
-            hrs += Math.ceil(piles[i] / mid);
+    while(left<=right){
+        var k=Math.floor((left+right)/2);
+        var hours=0;
+        for(var p of piles){
+            hours+=Math.ceil(p/k);
         }
-
-
-        if(h >= hrs) {
-            right = mid - 1;
-            k = Math.min(k, mid);
+        if(hours<=h){
+            res=Math.min(res,k);
+            right=k-1;
+        }else{
+            left=k+1;
         }
-        
-        if(h < hrs) {
-            left = mid + 1;
-        }
-
-
-
     }
-
-    return k;
-
-
+    return res;
+    
 };
