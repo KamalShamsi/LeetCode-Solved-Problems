@@ -2,25 +2,18 @@
  * @param {string} s
  * @return {number}
  */
-var lengthOfLongestSubstring = function (s) {
-    let sub = s[0];
-    if(!s.length){
-        return 0;
-    }
-    let longest = sub
-    let j = 0;
-    for (let i = j+1; i < s.length; i++) {
-        if(s.slice(j,i).split("").includes(s[i])){
-            ++j;
-            i=j;
-        }else{
-            sub=s.slice(j,i+1)
+var lengthOfLongestSubstring = function(s) {
+    const setMap = new Set();
+    let max = 0;
+    let index = 0;
+    for(let i = 0; i<s.length; i++){
+        let key = s[i];
+        while(setMap.has(key)){
+            setMap.delete(s[index]);
+            index++;
         }
-
-        if(sub.length>longest.length){
-            longest = sub;
-        }
-
+        setMap.add(key);
+        max = Math.max(max, setMap.size);
     }
-    return longest.length;
+    return max;
 };
