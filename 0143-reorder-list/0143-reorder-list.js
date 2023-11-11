@@ -1,38 +1,21 @@
-var reorderList = function (head) {
-	let slow = head
-	let fast = head
+var reorderList = function(head) {
+    var lists = [], cur = head, prev;
+    while(cur) {
+        prev = cur;
+        cur = cur.next;
+        prev.next = null;
+        lists.push(prev);
+    };
 
-	//find the middle of the list
-	while (fast.next !== null && fast.next.next !== null) {
-		slow = slow.next
-		fast = fast.next.next
-	}
+    var left = 0, right = lists.length - 1, dummy = new ListNode();
 
-	//separate the lists into two
-	let prev = null
-	let curr = slow.next
-	slow.next = null
-	//reverse the second list
-	while (curr != null) {
-		const next = curr.next
-		curr.next = prev
-		prev = curr
-		curr = next
-	}
+    while(left < right) {
+        lists[left].next = lists[right];
+        dummy.next = lists[left];
+        dummy = dummy.next.next; 
+        left++;
+        right--;
+    }
 
-	//merge the two lists together
-	let list1 = head
-	let list2 = prev
-
-	while (list2 !== null) {
-		//set the list 1 next pointer to list2 and go to the next node in list1
-		const next1 = list1.next
-		list1.next = list2
-		list1 = next1
-
-		//set the list 2 next pointer to list1 and go to the next node in list2
-		const next2 = list2.next
-		list2.next = list1
-		list2 = next2
-	}
+    if(left == right) dummy.next = lists[left];
 };
